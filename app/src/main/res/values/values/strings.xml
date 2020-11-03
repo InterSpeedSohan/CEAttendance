@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">LegionCE</string>
+    <string name="gps_network_not_enabled" />
+</resources>
