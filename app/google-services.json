@@ -1,0 +1,127 @@
+{
+  "project_info": {
+    "project_number": "671388948334",
+    "firebase_url": "https://legion-b7d46.firebaseio.com",
+    "project_id": "legion-b7d46",
+    "storage_bucket": "legion-b7d46.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671388948334:android:b36125f36f3b02a1ff537f",
+        "android_client_info": {
+          "package_name": "com.example.ceattendance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "671388948334-lll0ibhtknrgqthtemm0gs5e8usromea.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0x_aJP2OOxVVZ2WduyHAC1bx1DkqjwiQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "671388948334-lll0ibhtknrgqthtemm0gs5e8usromea.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671388948334:android:f0a96bd37c4624f7ff537f",
+        "android_client_info": {
+          "package_name": "com.example.legionfoe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "671388948334-lll0ibhtknrgqthtemm0gs5e8usromea.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0x_aJP2OOxVVZ2WduyHAC1bx1DkqjwiQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "671388948334-lll0ibhtknrgqthtemm0gs5e8usromea.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671388948334:android:f90efcb035517f59ff537f",
+        "android_client_info": {
+          "package_name": "com.example.legionfom"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "671388948334-lll0ibhtknrgqthtemm0gs5e8usromea.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0x_aJP2OOxVVZ2WduyHAC1bx1DkqjwiQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "671388948334-lll0ibhtknrgqthtemm0gs5e8usromea.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:671388948334:android:4f1d9a339c6bd5bdff537f",
+        "android_client_info": {
+          "package_name": "com.example.legionsec"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "671388948334-lll0ibhtknrgqthtemm0gs5e8usromea.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC0x_aJP2OOxVVZ2WduyHAC1bx1DkqjwiQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "671388948334-lll0ibhtknrgqthtemm0gs5e8usromea.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
