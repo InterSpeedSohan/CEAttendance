@@ -73,7 +73,7 @@ public class AttendanceActivity extends AppCompatActivity {
     Intent intent;
     static Bitmap bitmap;
     Button inBtn, outBtn, leaveBtn,submitBtn,cameraBtn,fromBtn,toBtn;
-    ProgressDialog progressDialog;
+    SweetAlertDialog sweetAlertDialog, progressDialog;
     JSONObject jsonObject;
     JSONArray jsonArray;
     Bundle IDbundle;
@@ -99,6 +99,9 @@ public class AttendanceActivity extends AppCompatActivity {
     String typeId = "";
     Button gpsTextBtn;
     TextView gpsText, takeSelfieText;
+
+    boolean photoFlag = false;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -169,10 +172,8 @@ public class AttendanceActivity extends AppCompatActivity {
                 if(place.equals("Retail Point"))
                 {
                     retailerOptionLay.setVisibility(View.VISIBLE);
-                    progressDialog = new ProgressDialog(AttendanceActivity.this);
+                    progressDialog = new SweetAlertDialog(AttendanceActivity.this,SweetAlertDialog.PROGRESS_TYPE);
                     progressDialog.setTitle("Please wait...");
-                    progressDialog.setMessage("");
-                    progressDialog.setIndeterminate(true);
                     progressDialog.setCancelable(false);
                     progressDialog.show();
                     getRetailList();
@@ -212,8 +213,10 @@ public class AttendanceActivity extends AppCompatActivity {
                 inout_layout.setVisibility(View.VISIBLE);
                 leave_layout.setVisibility(View.GONE);
                 optionSpinner.setAdapter(adapter);
+                deleteTakenPicture();
                 currentPhotoPath = "";
                 takeSelfieText.setText("Take selfie");
+                photoFlag = false;
                 takeSelfieText.getResources().getColor(R.color.text_color);
             }
         });
@@ -228,8 +231,10 @@ public class AttendanceActivity extends AppCompatActivity {
                 inout_layout.setVisibility(View.VISIBLE);
                 leave_layout.setVisibility(View.GONE);
                 optionSpinner.setAdapter(adapter);
+                deleteTakenPicture();
                 currentPhotoPath = "";
                 takeSelfieText.setText("Take selfie");
+                photoFlag = false;
                 takeSelfieText.getResources().getColor(R.color.text_color);
             }
         });
@@ -280,8 +285,7 @@ public class AttendanceActivity extends AppCompatActivity {
                                 photoFile);
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                        takeSelfieText.setText("Take selfie (done)");
-                        takeSelfieText.getResources().getColor(R.color.input_color);
+
                     }
                 }
             }
@@ -367,25 +371,26 @@ public class AttendanceActivity extends AppCompatActivity {
                             Log.e("DXXXXXXXXXX", "Not Granted");
                             CustomUtility.showAlert(AttendanceActivity.this, "Permission not granted", "Permission");
                         } else {
-                            new AlertDialog.Builder(AttendanceActivity.this)
-                                    .setIcon(android.R.drawable.ic_dialog_alert)
-                                    .setTitle("Are You Sure?")
-                                    .setMessage("Are you sure you want to submit?")
-                                    .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            progressDialog = new ProgressDialog(AttendanceActivity.this);
-                                            progressDialog.setTitle("Please wait...");
-                                            progressDialog.setMessage("Uploading");
-                                            progressDialog.setIndeterminate(true);
-                                            progressDialog.setCancelable(false);
-                                            progressDialog.show();
-                                            upload();
-                                        }
-
-                                    })
-                                    .setNegativeButton("No", null)
-                                    .show();
+                            sweetAlertDialog = new SweetAlertDialog(AttendanceActivity.this, SweetAlertDialog.WARNING_TYPE);
+                            sweetAlertDialog.setTitle("Are you sure?");
+                            sweetAlertDialog.setConfirmButton("Ok", new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.dismissWithAnimation();
+                                    progressDialog = new SweetAlertDialog(AttendanceActivity.this,SweetAlertDialog.PROGRESS_TYPE);
+                                    progressDialog.setTitle("Please wait...");
+                                    progressDialog.setCancelable(false);
+                                    progressDialog.show();
+                                    upload();
+                                }
+                            });
+                            sweetAlertDialog.setCancelButton("No", new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sweetAlertDialog) {
+                                    sweetAlertDialog.dismissWithAnimation();
+                                }
+                            });
+                            sweetAlertDialog.show();
                         }
                     }
                 }
@@ -404,6 +409,17 @@ public class AttendanceActivity extends AppCompatActivity {
         });
 
 
+    }
+
+    //after finishing camera intent whether the picture was save or not
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            photoFlag = true;
+            takeSelfieText.setText("Take selfie (done)");
+            takeSelfieText.getResources().getColor(R.color.input_color);
+        }
     }
 
 
@@ -438,7 +454,7 @@ public class AttendanceActivity extends AppCompatActivity {
             CustomUtility.showWarning(this,"Turn on location setting","Required feild!");
             return -1;
         }
-        else if((activeBtn.equals("in") | activeBtn.equals("out") )& currentPhotoPath.equals(""))
+        else if((activeBtn.equals("in") | activeBtn.equals("out") ) & !photoFlag)
         {
             CustomUtility.showWarning(this,"Take selfie","Required feild!");
             return -1;
@@ -476,7 +492,7 @@ public class AttendanceActivity extends AppCompatActivity {
             }
             imageString = CustomUtility.imageToString(bitmap);
         }
-        String upLoadServerUri = "https://imslpro.com/ce/api/android/attendance_panel1.php";
+        String upLoadServerUri = "https://atmdbd.com/ce/api/android/attendance_panel1.php";
         StringRequest stringRequest = new StringRequest(Request.Method.POST, upLoadServerUri,
                 new Response.Listener<String>() {
                     @Override
@@ -490,9 +506,9 @@ public class AttendanceActivity extends AppCompatActivity {
                             if(code.equals("true"))
                             {
                                 code = "Successful";
+                                deleteTakenPicture();
                                 new SweetAlertDialog(AttendanceActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                                         .setTitleText("Successful")
-                                        .setContentText("Refreshing this form")
                                         .setConfirmText("Ok")
                                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                                             @Override
@@ -521,14 +537,6 @@ public class AttendanceActivity extends AppCompatActivity {
                 progressDialog.dismiss();
                 Log.e("response","onerrorResponse");
                 CustomUtility.showError(AttendanceActivity.this, "Network slow, try again", "Failed");
-                NetworkResponse response = error.networkResponse;
-                String errorMsg = "";
-                Log.e("response", String.valueOf(response));
-                if(response != null && response.data != null){
-                    String errorString = new String(response.data);
-                    Log.i("log error", errorString);
-                    CustomUtility.showError(AttendanceActivity.this, errorString + " try again", "Failed");
-                }
             }
         }
         ) {
@@ -560,9 +568,20 @@ public class AttendanceActivity extends AppCompatActivity {
         MySingleton.getInstance(this).addToRequestQue(stringRequest);
     }
 
+    private void deleteTakenPicture() {
+        File fdelete = new File(currentPhotoPath);
+        if (fdelete.exists()) {
+            if (fdelete.delete()) {
+                System.out.println("file Deleted :" + currentPhotoPath);
+            } else {
+                System.out.println("file not Deleted :" + currentPhotoPath);
+            }
+        }
+    }
+
     private void getRetailList() {
 
-        String upLoadServerUri="https://imslpro.com/ce/api/android/get_retailer_list.php";
+        String upLoadServerUri="https://atmdbd.com/ce/api/android/get_retailer_list.php";
         StringRequest stringRequest=new StringRequest(Request.Method.POST, upLoadServerUri,
                 new Response.Listener<String>() {
                     @Override

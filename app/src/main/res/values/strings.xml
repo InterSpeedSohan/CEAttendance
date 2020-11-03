@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CE Attendance</string>
+    <string name="version">Version 1.0</string>
 </resources>
