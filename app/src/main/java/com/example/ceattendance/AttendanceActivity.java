@@ -14,6 +14,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -283,6 +284,10 @@ public class AttendanceActivity extends AppCompatActivity {
                         photoURI = FileProvider.getUriForFile(getApplicationContext(),
                                 "com.example.ceattendance.fileprovider",
                                 photoFile);
+                        if ((Build.VERSION.SDK_INT > Build.VERSION_CODES.KITKAT))
+                            photoURI = FileProvider.getUriForFile(getApplicationContext(), "com.example.ceattendance.fileprovider", photoFile);
+                        else
+                            photoURI = Uri.fromFile(photoFile);
                         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
                         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 
